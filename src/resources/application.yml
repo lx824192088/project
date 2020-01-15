@@ -1,0 +1,21 @@
+spring:
+  application:
+    name: shipment
+  datasource:
+    type: com.zaxxer.hikari.HikariDataSource
+    name: default
+    url: jdbc:mysql://127.0.0.1:3306/shipment
+    username: root
+    password:
+
+server:
+  port: 8080
+
+logging:
+  level:
+    com.runyi.fund: DEBUG
+    root: INFO
+
+mybatis:
+  mapper-locations: classpath:mapping/*Mapper.xml
+  type-aliases-package: com.shipment.model

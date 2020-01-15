@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.shipment.dao.ShipmentMapper">
+    <resultMap type="com.shipment.model.Shipment" id="Shipment">
+        <result property="id" column="ID" />
+        <result property="tradeOrderId" column="TRADE_ORDER_ID" />
+        <result property="parentShipmentId" column="PARENT_SHIPMENT_ID" />
+        <result property="childShipmentId" column="CHILD_SHIPMENT_ID" />
+        <result property="status" column="STATUS" />
+        <result property="quantity" column="QUANTITY" />
+        <result property="createUser" column="CREATE_USER" />
+        <result property="createTime" column="CREATE_TIME" />
+        <result property="modifyUser" column="MODIFY_USER" />
+        <result property="modifyTime" column="MODIFY_TIME" />
+    </resultMap>
+
+    <select id="find" resultMap="Shipment">
+        SELECT
+        *
+        FROM SHIPMENT
+        WHERE ID = #{id} and status='1'
+    </select>
+
+
+    <select id="findList" resultMap="Shipment">
+        SELECT
+        *
+        FROM SHIPMENT
+        WHERE TRADE_ORDER_ID = #{tradeOrderId} and status='1'
+    </select>
+
+    <select id="findListAll" resultMap="Shipment">
+        SELECT
+        *
+        FROM SHIPMENT
+        WHERE TRADE_ORDER_ID = #{tradeOrderId}
+    </select>
+
+    <select id="findListByParentId" resultMap="Shipment">
+        SELECT
+        *
+        FROM SHIPMENT
+        WHERE PARENT_SHIPMENT_ID = #{parentShipmentId}
+    </select>
+
+    <select id="findListByChildId" resultMap="Shipment">
+        SELECT
+        *
+        FROM SHIPMENT
+        WHERE CHILD_SHIPMENT_ID = #{childShipmentId}
+    </select>
+
+    <insert id="insert" parameterType="com.shipment.model.Shipment"  useGeneratedKeys="true" keyProperty="id" >
+        INSERT  INTO SHIPMENT (
+        ID
+        ,TRADE_ORDER_ID
+        ,PARENT_SHIPMENT_ID
+        ,CHILD_SHIPMENT_ID
+        ,STATUS
+        ,QUANTITY
+        ,CREATE_USER
+        ,CREATE_TIME
+        ,MODIFY_USER
+        ,MODIFY_TIME
+        )
+        VALUES(#{id},#{tradeOrderId},#{parentShipmentId},#{childShipmentId},#{status},#{quantity},#{createUser},#{createTime},#{modifyUser},#{modifyTime})
+    </insert>
+
+    <update id="update" parameterType="com.shipment.model.Shipment">
+        UPDATE SHIPMENT
+        <set>
+            MODIFY_TIME = sysdate()
+            <if test="tradeOrderId!=null">,TRADE_ORDER_ID = #{tradeOrderId}</if>
+            <if test="parentShipmentId!=null">,PARENT_SHIPMENT_ID = #{parentShipmentId}</if>
+            <if test="childShipmentId!=null">,CHILD_SHIPMENT_ID = #{childShipmentId}</if>
+            <if test="status!=null">,STATUS = #{status}</if>
+            <if test="quantity!=null">,QUANTITY = #{quantity}</if>
+            <if test="createUser!=null">,CREATE_USER = #{createUser}</if>
+            <if test="modifyUser!=null">,MODIFY_USER = #{modifyUser}</if>
+        </set>
+        WHERE ID = #{id}
+    </update>
+
+    <update id="updateByTradeId" parameterType="com.shipment.model.Shipment">
+        UPDATE SHIPMENT
+        <set>
+            MODIFY_TIME = sysdate()
+            <if test="parentShipmentId!=null">,PARENT_SHIPMENT_ID = #{parentShipmentId}</if>
+            <if test="childShipmentId!=null">,CHILD_SHIPMENT_ID = #{childShipmentId}</if>
+            <if test="status!=null">,STATUS = #{status}</if>
+            <if test="quantity!=null">,QUANTITY = #{quantity}</if>
+            <if test="createUser!=null">,CREATE_USER = #{createUser}</if>
+            <if test="modifyUser!=null">,MODIFY_USER = #{modifyUser}</if>
+        </set>
+        WHERE tradeOrderId = #{tradeOrderId}
+    </update>
+
+    <delete id="delete" parameterType="com.shipment.model.Shipment">
+        DELETE FROM SHIPMENT
+        WHERE  ID = #{id}
+        <if test="tradeOrderId!=null and tradeOrderId!=''">AND TRADE_ORDER_ID = #{tradeOrderId}</if>
+        <if test="parentShipmentId!=null and parentShipmentId!=''">AND PARENT_SHIPMENT_ID = #{parentShipmentId}</if>
+        <if test="childShipmentId!=null and childShipmentId!=''">AND CHILD_SHIPMENT_ID = #{childShipmentId}</if>
+        <if test="status!=null and status!=''">AND STATUS = #{status}</if>
+        <if test="quantity!=null">AND QUANTITY = #{quantity}</if>
+        <if test="createUser!=null and createUser!=''">AND CREATE_USER = #{createUser}</if>
+        <if test="createTime!=null">AND CREATE_TIME = #{createTime}</if>
+        <if test="modifyUser!=null and modifyUser!=''">AND MODIFY_USER = #{modifyUser}</if>
+        <if test="modifyTime!=null">AND MODIFY_TIME = #{modifyTime}</if>
+    </delete>
+</mapper>
